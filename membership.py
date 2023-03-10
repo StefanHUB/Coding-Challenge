@@ -57,10 +57,11 @@ def calculate_membership_fee(rent_amount:int, rent_period:str, organisation_unit
     
             
     return membership_fee   
-x = OrganisationUnitConfig(False, 0)
-v = OrganisationUnitConfig(True, 2000)
-y = OrganisationUnit("Area", x, parent = None)
-z = OrganisationUnit("Branch", config=None, parent = None)
+
+# x = OrganisationUnitConfig(False, 0)
+# v = OrganisationUnitConfig(True, 2000)
+# y = OrganisationUnit("Area", x, parent = None)
+# z = OrganisationUnit("Branch", config=None, parent = None)
 
 
 

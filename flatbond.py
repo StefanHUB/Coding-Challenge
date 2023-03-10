@@ -9,19 +9,20 @@
 
 # Configuration
 class OrganisationUnitConfig:
-    def __init__(self, has_fixed_membership_fee : bool = None, fixed_membership_fee_amount : int = None):
+    def __init__(self, has_fixed_membership_fee : bool = None, fixed_membership_fee_amount : int = None) -> None:
         self.has_fixed_membership_fee = has_fixed_membership_fee
         self.fixed_membership_fee_amount = fixed_membership_fee_amount
 
 # Organisation
 class OrganisationUnit:
-    def __init__(self, name:str, config : OrganisationUnitConfig = None, parent : 'OrganisationUnit' = None):
+    def __init__(self, name:str, config : OrganisationUnitConfig = None, parent : 'OrganisationUnit' = None) -> None:
         self.name = name
         self.config = config
         self.parent = parent
 
 def calculate_membership_fee(rent_amount:int, rent_period:str, organisation_unit:OrganisationUnit) -> int:
     membership_fee = 0
+    vat = 0.2
 # Validation
     if rent_period == "month" and  (rent_amount < 110 * 100 or rent_amount > 8660 * 100):
         raise ValueError("Monthly rent cannot be validated")
@@ -35,11 +36,11 @@ def calculate_membership_fee(rent_amount:int, rent_period:str, organisation_unit
 # Calculate unfixed membership fee
     elif organisation_unit.config is not None:
         if rent_period == "month":       
-            membership_fee = rent_amount / 4 + 0.2*rent_amount
+            membership_fee = rent_amount / 4 + vat*rent_amount
         if rent_period == "week":
-            membership_fee = rent_amount + 0.2*rent_amount
+            membership_fee = rent_amount + vat*rent_amount
         if (rent_amount) < 120 * 100:
-            membership_fee = 120 * 100 + 0.2 * 120 * 100
+            membership_fee = 120 * 100 + vat * 120 * 100
     
 # Check parents recursively to find an existing configuration     
     if organisation_unit.config is None and organisation_unit.parent is not None:

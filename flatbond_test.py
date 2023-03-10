@@ -2,7 +2,6 @@ import unittest
 from flatbond import OrganisationUnitConfig, OrganisationUnit, calculate_membership_fee
 
 
-
 class TestOrganisationUnitConfig(unittest.TestCase):
 
 # Test organisation configuration constructor
@@ -51,12 +50,12 @@ class TestCalculateMembershipFee(unittest.TestCase):
         self.assertEqual(unit.config.fixed_membership_fee_amount, 1000)
         self.assertEqual(unit.name, 'Unit')
         self.assertEqual(unit.config, config)
+        self.assertEqual(self.client.name, 'Client')
+        self.assertEqual(self.client.parent, None)
 
 # Min week -> 2500, Max week -> 200000, Min month -> 11000, Max month -> 860000
     def test_validation(self):
-        config = OrganisationUnitConfig(True, 1000)
-        parent_unit = OrganisationUnit('Parent',config)
-        unit = OrganisationUnit('Child', None, parent_unit)
+        unit = OrganisationUnit('Child', None, self.branch_b)
         with self.assertRaises(ValueError):
             calculate_membership_fee(200001, 'week', unit)
         with self.assertRaises(ValueError):
@@ -68,11 +67,9 @@ class TestCalculateMembershipFee(unittest.TestCase):
 
 # Test calculation when organisation configuration has fixed membership fee
     def test_with_fixed_membership_fee(self):
-        config = OrganisationUnitConfig(True, 1000)
-        parent_unit = OrganisationUnit('Client', config)
-        unit = OrganisationUnit('Branch', None, parent_unit)
+        unit = OrganisationUnit('Unit',None,self.div_b)
         fee = calculate_membership_fee(2500, 'week', unit)
-        self.assertEqual(fee, 1000)
+        self.assertEqual(fee, 350000)
         fee = calculate_membership_fee(3000, 'week', self.area_a)
         self.assertEqual(fee, 45000)
 
@@ -80,17 +77,15 @@ class TestCalculateMembershipFee(unittest.TestCase):
     def test_with_unfixed_membership_fee(self):
         fee = calculate_membership_fee(20000, 'month', self.branch_m)
         self.assertEqual(fee, 9000)
-    
 
-    
-# Minimum membership, if rent lower than 120$ membership will be fixed at 120$ + VAT
+# Test minimum membership, if rent lower than 120$ membership will be fixed at 120$ + VAT
     def test_minimum_membership(self):
         fee = calculate_membership_fee(12000,'week',self.branch_l)
         fee1 = calculate_membership_fee(11000,'week',self.branch_l)
         self.assertEqual(fee , 14400)
         self.assertEqual(fee1, 14400)
 
-# Test recursion when organisation unit does not have a config
+# Test recursion when organisation unit does not have a configuration
     def test_flat(self):
         fee = calculate_membership_fee(20000, 'month', self.branch_d)
         self.assertEqual(fee, 45000)

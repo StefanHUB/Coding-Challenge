@@ -1,5 +1,5 @@
 import unittest
-from membership import OrganisationUnitConfig, OrganisationUnit, calculate_membership_fee
+from flatbond import OrganisationUnitConfig, OrganisationUnit, calculate_membership_fee
 
 class TestOrganisationUnitConfig(unittest.TestCase):
 

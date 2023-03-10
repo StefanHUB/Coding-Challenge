@@ -6,6 +6,7 @@
 
 
 """
+
 # Configuration
 class OrganisationUnitConfig:
     def __init__(self, has_fixed_membership_fee : bool = None, fixed_membership_fee_amount : int = None):
@@ -18,7 +19,6 @@ class OrganisationUnit:
         self.name = name
         self.config = config
         self.parent = parent
-
 
 def calculate_membership_fee(rent_amount:int, rent_period:str, organisation_unit:OrganisationUnit) -> int:
     membership_fee = 0
@@ -39,11 +39,13 @@ def calculate_membership_fee(rent_amount:int, rent_period:str, organisation_unit
         if rent_period == "week":
             membership_fee = rent_amount + 0.2*rent_amount
         if (rent_amount) < 120 * 100:
-            membership_fee = 120*100 + 0.2*rent_amount
+            membership_fee = 120 * 100 + 0.2 * 120 * 100
     
 # Check parents recursively to find an existing configuration     
     if organisation_unit.config is None and organisation_unit.parent is not None:
         membership_fee = calculate_membership_fee(rent_amount,rent_period,organisation_unit.parent)
 
-    return membership_fee   
+    return membership_fee
+
+
 

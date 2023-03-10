@@ -63,7 +63,8 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
     if rent_period != "month" and rent_period != "week":
         raise ValueError("Invalid rent period")
     if rent_amount < 0:
-        raise ValueError("Invalid rent amount") 
+        raise ValueError("Invalid rent amount")
+     
     # Calculate fixed membership fee
     if organisation_unit.config is not None and organisation_unit.config.has_fixed_membership_fee:
         membership_fee = organisation_unit.config.fixed_membership_fee_amount
@@ -76,6 +77,7 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
             membership_fee = rent_amount + vat * rent_amount
         if (rent_amount) < 120 * 100:
             membership_fee = 12000 + vat * 12000
+            
     # Check parents recursively to find an existing configuration
     if organisation_unit.config is None and organisation_unit.parent:
         membership_fee = calculate_membership_fee(rent_amount, rent_period, organisation_unit.parent)

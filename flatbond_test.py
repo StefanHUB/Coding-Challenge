@@ -72,10 +72,10 @@ class TestCalculateMembershipFee(unittest.TestCase):
     def test_with_fixed_membership_fee(self):
         config = OrganisationUnitConfig(True, 2000)
         unit = OrganisationUnit('Unit', config, self.branch_k)
-        fee1 = calculate_membership_fee(2500, 'week', unit)
+        fee1 = calculate_membership_fee(3000, 'week', unit)
         self.assertEqual(fee1, 2000)
-        fee2 = calculate_membership_fee(12000, 'week', self.branch_j)
-        self.assertEqual(fee2, 14400)
+        fee2 = calculate_membership_fee(20000, 'month', self.branch_k)
+        self.assertEqual(fee2, 25000)
 
     # Test calculation when organisation configuration does not have fixed membership fee
     def test_with_unfixed_membership_fee(self):

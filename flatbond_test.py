@@ -3,13 +3,13 @@ from flatbond import OrganisationUnitConfig, OrganisationUnit, calculate_members
 
 
 class TestOrganisationUnitConfig(unittest.TestCase):
-
     # Test organisation configuration constructor
     def test_init(self):
         config = OrganisationUnitConfig(True, 1000)
         self.assertEqual(config.has_fixed_membership_fee, True)
         self.assertEqual(config.fixed_membership_fee_amount, 1000)
-        
+
+
 class TestOrganisationUnit(unittest.TestCase):
     # Test organisation unit constructor
     def test_init(self):
@@ -22,6 +22,7 @@ class TestOrganisationUnit(unittest.TestCase):
 
 
 class TestCalculateMembershipFee(unittest.TestCase):
+    # Create a hierarchy of organisation units for testing purposes
     def setUp(self):
         config = OrganisationUnitConfig(False, 0)
         config2 = OrganisationUnitConfig(True, 350000)
@@ -34,7 +35,7 @@ class TestCalculateMembershipFee(unittest.TestCase):
         area_b = OrganisationUnit('Area B', parent=div_a)
         area_c = OrganisationUnit('Area C', config3, parent=div_b)
         area_d = OrganisationUnit('Area D', config, parent=div_b)
-        self.branch_a = OrganisationUnit('Branch A', parent=area_a)  
+        self.branch_a = OrganisationUnit('Branch A', parent=area_a)
         self.branch_b = OrganisationUnit('Branch B', config, parent=area_a)
         self.branch_c = OrganisationUnit('Branch C', config, parent=area_a)
         self.branch_d = OrganisationUnit('Branch D', parent=area_a)
@@ -51,9 +52,9 @@ class TestCalculateMembershipFee(unittest.TestCase):
         self.branch_o = OrganisationUnit('Branch O', config, parent=area_d)
         self.branch_p = OrganisationUnit('Branch P', config, parent=area_d)
 
-    # Min week -> 2500, Max week -> 200000, Min month -> 11000, Max month -> 860000
+    # Min week -> 2,500 ; Max week -> 200,000 ; Min month -> 11,000 ; Max month -> 860,000
     def test_validation(self):
-        unit = OrganisationUnit('Child', None,self.branch_b)
+        unit = OrganisationUnit('Child', None, self.branch_b)
         with self.assertRaises(ValueError):
             calculate_membership_fee(200001, 'week', unit)
         with self.assertRaises(ValueError):
@@ -62,37 +63,35 @@ class TestCalculateMembershipFee(unittest.TestCase):
             calculate_membership_fee(10999, 'month', unit)
         with self.assertRaises(ValueError):
             calculate_membership_fee(866001, 'month', unit)
+        with self.assertRaises(ValueError):
+            calculate_membership_fee(3000, 'wee', unit)
 
     # Test calculation when organisation configuration has fixed membership fee
+
     def test_with_fixed_membership_fee(self):
-        unit = OrganisationUnit('Unit',None,self.branch_k)
+        config = OrganisationUnitConfig(True, 2000)
+        unit = OrganisationUnit('Unit', config, self.branch_k)
         fee1 = calculate_membership_fee(2500, 'week', unit)
-        self.assertEqual(fee1, 25000)
+        self.assertEqual(fee1, 2000)
         fee2 = calculate_membership_fee(12000, 'week', self.branch_j)
         self.assertEqual(fee2, 14400)
 
     # Test calculation when organisation configuration does not have fixed membership fee
     def test_with_unfixed_membership_fee(self):
-        fee = calculate_membership_fee(20000, 'month',self.branch_m)
+        fee = calculate_membership_fee(20000, 'month', self.branch_m)
         self.assertEqual(fee, 9000)
 
     # Test minimum membership, if rent lower than 120$ membership will be fixed at 120$ + VAT
     def test_minimum_membership(self):
-        fee = calculate_membership_fee(12000,'week',self.branch_l)
-        fee1 = calculate_membership_fee(11000,'week',self.branch_l)
-        self.assertEqual(fee , 14400)
+        fee = calculate_membership_fee(12000, 'week', self.branch_l)
+        fee1 = calculate_membership_fee(11000, 'week', self.branch_l)
+        self.assertEqual(fee, 14400)
         self.assertEqual(fee1, 14400)
 
     # Test recursion when current organisation unit does not have a configuration
-    def test_flat(self):
+    def test_recursion(self):
         fee = calculate_membership_fee(20000, 'month', self.branch_d)
         self.assertEqual(fee, 45000)
-
-    # Test when wrong rent period is taken as input
-    def test_valid_rent_period(self):
-        unit = OrganisationUnit("Unit",None,None)
-        with self.assertRaises(ValueError):
-            calculate_membership_fee(3000, 'wee', unit)
 
 
 if __name__ == '__main__':

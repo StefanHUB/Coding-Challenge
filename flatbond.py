@@ -62,6 +62,8 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
         raise ValueError("Weekly rent cannot be validated")
     if rent_period != "month" and rent_period != "week":
         raise ValueError("Invalid rent period")
+    if rent_amount < 0:
+        raise ValueError("Invalid rent amount") 
     # Calculate fixed membership fee
     if organisation_unit.config is not None and organisation_unit.config.has_fixed_membership_fee:
         membership_fee = organisation_unit.config.fixed_membership_fee_amount

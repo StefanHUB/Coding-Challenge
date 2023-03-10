@@ -65,6 +65,8 @@ class TestCalculateMembershipFee(unittest.TestCase):
             calculate_membership_fee(866001, 'month', unit)
         with self.assertRaises(ValueError):
             calculate_membership_fee(3000, 'wee', unit)
+        with self.assertRaises(ValueError):
+            calculate_membership_fee(-1, 'week', unit)
 
     # Test calculation when organisation configuration has fixed membership fee
     def test_with_fixed_membership_fee(self):

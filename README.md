@@ -1,17 +1,17 @@
 # Coding-Challenge
 
-# README
-# Organisation Structure
+
+## Organisation Structure
 The organization structure is based on the parent argument of OrganisationUnit. The parent acts as a pointer towards the address of the parent organization unit.
 
-# OrganisationUnitConfig Class
+## OrganisationUnitConfig Class
 
 The OrganisationUnitConfig is a configuration object for an organisation unit, which has the following attributes:
 
  ● has_fixed_membership_fee (bool): Indicates whether the organisation has a fixed membership fee
  ● fixed_membership_fee_amount (int): The fixed membership fee amount
 
-# OrganisationUnit Class
+## OrganisationUnit Class
 
 The OrganisationUnit class represents an organisation unit, which has the following attributes:
 
@@ -19,7 +19,7 @@ The OrganisationUnit class represents an organisation unit, which has the follow
  ● config (OrganisationUnitConfig): The configuration object for the organisation.
  ● parent (OrganisationUnit): The parent organisation, acts as a pointer
 
-# calculate_membership_fee Function
+## calculate_membership_fee Function
 
 The function calculates the membership fee for an organisation unit based on the rent amount, rent period, and the organisation unit configuration. It returns the calculated membership fee as an integer.
 The function has the following arguments:
@@ -34,7 +34,7 @@ The function has the following arguments:
  ● The rent period is not either 'week' or 'month'
  ● The rent amount is less than zero
 
-# Unit Tests
+## Unit Tests
 The project includes unit tests to ensure the proper functioning of the code. There are three test classes:
 
  ● TestOrganisationUnitConfig: Tests the OrganisationUnitConfig class constructor.

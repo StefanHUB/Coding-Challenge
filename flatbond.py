@@ -43,7 +43,7 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
     Args:
         rent_amount : The rent amount.
         rent_period : The rent period ('month' or 'week').
-        organisation_unit : The organisation for which to calculate the membership fee.
+        organisation_unit : The organisation for which to calculate the membership.
 
     Returns:
         int: The actual membership fee.

@@ -2,11 +2,11 @@
 
 
 ## Organisation Structure
-The organization structure is based on the parent argument of OrganisationUnit. The parent acts as a pointer towards the address of the parent organization unit.
+The organization structure is based on the parent argument of **OrganisationUnit**. The **parent** acts as a pointer towards the address of the parent organization unit.
 
 ## OrganisationUnitConfig Class
 
-The OrganisationUnitConfig is a configuration object for an organisation unit, which has the following attributes:
+The **OrganisationUnitConfig** is a configuration object for an organisation unit, which has the following attributes:
 
  ● has_fixed_membership_fee (bool): Indicates whether the organisation has a fixed membership fee
  
@@ -14,7 +14,7 @@ The OrganisationUnitConfig is a configuration object for an organisation unit, w
 
 ## OrganisationUnit Class
 
-The OrganisationUnit class represents an organisation unit, which has the following attributes:
+The **OrganisationUnit** class represents an organisation unit, which has the following attributes:
 
  ● name (str): The name of the organisation.
  
@@ -44,11 +44,11 @@ The function has the following arguments:
 ## Unit Tests
 The project includes unit tests to ensure the proper functioning of the code. There are three test classes:
 
- ● TestOrganisationUnitConfig: Tests the OrganisationUnitConfig class constructor.
+ ● TestOrganisationUnitConfig: Tests the **OrganisationUnitConfig** class constructor.
  
- ● TestOrganisationUnit: Tests the OrganisationUnit class constructor.
+ ● TestOrganisationUnit: Tests the **OrganisationUnit** class constructor.
  
  ● TestCalculateMembershipFee: Tests the calculate_membership_fee function.
- The TestCalculateMembershipFee class uses a hierarchy of OrganisationUnit objects for testing purposes
+ The TestCalculateMembershipFee class uses a hierarchy of **OrganisationUnit** objects for testing purposes
  
  The hierarchy used is the one that was given as an example

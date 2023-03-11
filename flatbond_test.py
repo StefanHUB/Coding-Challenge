@@ -66,7 +66,7 @@ class TestCalculateMembershipFee(unittest.TestCase):
         with self.assertRaises(ValueError):
             calculate_membership_fee(3000, 'wee', unit)
         with self.assertRaises(ValueError):
-            calculate_membership_fee(-1, 'week', unit)
+            calculate_membership_fee(0, 'week', unit)
 
     # Test calculation when organisation configuration has fixed membership fee
     def test_with_fixed_membership_fee(self):
@@ -79,15 +79,17 @@ class TestCalculateMembershipFee(unittest.TestCase):
 
     # Test calculation when organisation configuration does not have fixed membership fee
     def test_with_unfixed_membership_fee(self):
-        fee = calculate_membership_fee(20000, 'month', self.branch_m)
-        self.assertEqual(fee, 9000)
+        fee = calculate_membership_fee(80000, 'month', self.branch_m)
+        self.assertEqual(fee, 24000)
 
     # Test minimum membership, if rent lower than 120$ membership will be fixed at 120$ + VAT
     def test_minimum_membership(self):
         fee = calculate_membership_fee(12000, 'week', self.branch_l)
         fee1 = calculate_membership_fee(11000, 'week', self.branch_l)
+        fee2 = calculate_membership_fee(40000, 'month', self.branch_l)
         self.assertEqual(fee, 14400)
         self.assertEqual(fee1, 14400)
+        self.assertEqual(fee2, 14400)
 
     # Test recursion when current organisation unit does not have a configuration
     def test_recursion(self):

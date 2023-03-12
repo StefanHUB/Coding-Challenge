@@ -55,11 +55,15 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
     membership_fee = 0
     VAT = 0.2
 
-    # Rent validation
-    if rent_period not in ('month', 'week'):
-        raise ValueError("Invalid rent period")
+    # Input Validation
     if rent_amount < 1:
         raise ValueError("Invalid rent amount")
+    if rent_period not in ('month', 'week'):
+        raise ValueError("Invalid rent period")
+    if not isinstance(organisation_unit, OrganisationUnit):
+        raise ValueError("Invalid organisation")
+
+    # Rent validation
     if rent_period == "month" and (rent_amount < 110 * 100 or rent_amount > 8660 * 100):
         raise ValueError("Monthly rent cannot be validated")
     if rent_period == "week" and (rent_amount < 25 * 100 or rent_amount > 2000 * 100):
@@ -79,7 +83,7 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
             membership_fee = rent_amount + VAT * rent_amount
             if (rent_amount) < 120 * 100:
                 membership_fee = 12000 + VAT * 12000
-            
+
     # Check parents recursively to find an existing configuration
     if organisation_unit.config is None and organisation_unit.parent is not None:
         membership_fee = calculate_membership_fee(rent_amount, rent_period, organisation_unit.parent)

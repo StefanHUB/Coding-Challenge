@@ -52,9 +52,20 @@ class TestCalculateMembershipFee(unittest.TestCase):
         self.branch_o = OrganisationUnit('Branch O', config, parent=area_d)
         self.branch_p = OrganisationUnit('Branch P', config, parent=area_d)
 
+    # rent_amount > 0 ; rent_period = ('month', 'week') ; organisation_unit has to be an OrganisationUnit object
+    def test_input_validation(self):
+        instance = "Random object"
+        unit = OrganisationUnit('Unit', None, self.branch_b)
+        with self.assertRaises(ValueError):
+            calculate_membership_fee(0, 'week', unit)
+        with self.assertRaises(ValueError):
+            calculate_membership_fee(200000, 'wee', unit)
+        with self.assertRaises(ValueError):
+            calculate_membership_fee(25000, 'month', instance)
+
     # Min week -> 2,500 ; Max week -> 200,000 ; Min month -> 11,000 ; Max month -> 860,000
-    def test_validation(self):
-        unit = OrganisationUnit('Child', None, self.branch_b)
+    def test_rent_validation(self):
+        unit = OrganisationUnit('Unit', None, self.branch_b)
         with self.assertRaises(ValueError):
             calculate_membership_fee(200001, 'week', unit)
         with self.assertRaises(ValueError):
@@ -63,12 +74,9 @@ class TestCalculateMembershipFee(unittest.TestCase):
             calculate_membership_fee(10999, 'month', unit)
         with self.assertRaises(ValueError):
             calculate_membership_fee(866001, 'month', unit)
-        with self.assertRaises(ValueError):
-            calculate_membership_fee(3000, 'wee', unit)
-        with self.assertRaises(ValueError):
-            calculate_membership_fee(0, 'week', unit)
 
     # Test calculation when organisation configuration has fixed membership fee
+
     def test_with_fixed_membership_fee(self):
         config = OrganisationUnitConfig(True, 2000)
         unit = OrganisationUnit('Unit', config, self.branch_k)

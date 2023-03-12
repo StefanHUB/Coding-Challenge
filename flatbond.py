@@ -53,18 +53,18 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
                     If the rent period is not either 'week' or 'month'
     """
     membership_fee = 0
-    vat = 0.2
+    VAT = 0.2
 
     # Rent validation
+    if rent_period not in ('month', 'week'):
+        raise ValueError("Invalid rent period")
+    if rent_amount < 1:
+        raise ValueError("Invalid rent amount")
     if rent_period == "month" and (rent_amount < 110 * 100 or rent_amount > 8660 * 100):
         raise ValueError("Monthly rent cannot be validated")
     if rent_period == "week" and (rent_amount < 25 * 100 or rent_amount > 2000 * 100):
         raise ValueError("Weekly rent cannot be validated")
-    if rent_period != "month" and rent_period != "week":
-        raise ValueError("Invalid rent period")
-    if rent_amount < 1:
-        raise ValueError("Invalid rent amount")
-     
+
     # Calculate fixed membership fee
     if organisation_unit.config is not None and organisation_unit.config.has_fixed_membership_fee:
         membership_fee = organisation_unit.config.fixed_membership_fee_amount
@@ -72,16 +72,16 @@ def calculate_membership_fee(rent_amount: int, rent_period: str, organisation_un
     # Calculate unfixed membership fee
     elif organisation_unit.config is not None:
         if rent_period == "month":
-            membership_fee = rent_amount / 4 + vat * (rent_amount / 4)
+            membership_fee = rent_amount / 4 + VAT * (rent_amount / 4)
             if (rent_amount/4) < 120 * 100:
-                membership_fee = 12000 + vat * 12000
+                membership_fee = 12000 + VAT * 12000
         elif rent_period == "week":
-            membership_fee = rent_amount + vat * rent_amount
+            membership_fee = rent_amount + VAT * rent_amount
             if (rent_amount) < 120 * 100:
-                membership_fee = 12000 + vat * 12000
+                membership_fee = 12000 + VAT * 12000
             
     # Check parents recursively to find an existing configuration
-    if organisation_unit.config is None and organisation_unit.parent:
+    if organisation_unit.config is None and organisation_unit.parent is not None:
         membership_fee = calculate_membership_fee(rent_amount, rent_period, organisation_unit.parent)
 
-    return membership_fee
+    return int(membership_fee)
